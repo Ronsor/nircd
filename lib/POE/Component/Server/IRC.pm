@@ -6584,6 +6584,7 @@ sub _state_auth_peer_conn {
 
     if (!$peers->{uc $name}) {
 	$name = "default";
+	return 1;
     }
     if (!$peers->{uc $name} || $peers->{uc $name}{pass} ne $pass) {
         return 0;
