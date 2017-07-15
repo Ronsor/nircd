@@ -33,3 +33,9 @@ inc/
 /MANIFEST.bak
 /pm_to_blib
 /*.zip
+
+ssl.crt
+ssl.key
+ircd.motd
+ircd.conf
+
