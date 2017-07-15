@@ -47,6 +47,8 @@ fi
 else
 printf "found\n"
 fi
+if [ ! -e "ssl.key" ]; then
 printf "Generating SSL Information...\n"
 openssl req -x509 -nodes -newkey rsa:2048 -keyout ssl.key -out ssl.crt -days 4096 -subj "/CN=`uname -n`"
+fi
 printf "Done\n"
