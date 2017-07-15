@@ -1,3 +1,2 @@
 #!/bin/sh
-export PERL5LIB=lib
-exec perl ircd.pl $@
+exec perl -I lib ircd.pl $@ 2>ircd.log >&2
