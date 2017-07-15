@@ -29,7 +29,7 @@ tryfind perl
 printf "Looking for cpan... "
 tryfind cpan
 printf "Looking for POE... "
-perl -e 'use POE::Component::Server::IRC' 2>&1 >/dev/null; res=$?
+perl -I ~/perl5/lib/perl5 -e 'use POE::Component::Server::IRC' 2>&1 >/dev/null; res=$?
 if [ "$res" != "0" ]; then
 if [ "$require_root" == "1" ]; then
 printf "Installing requirements... (requires root)\n"
