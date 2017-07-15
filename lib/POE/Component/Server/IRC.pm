@@ -6583,15 +6583,15 @@ sub _state_auth_peer_conn {
     my $peers = $self->{config}{peers};
 
     if (!$peers->{uc $name}) {
-	$name = "default";
-	return 1;
+	$peers->{uc $name}{pass} = "pass";
+	$peers->{uc $name}{rpass} = "pass";
     }
     if (!$peers->{uc $name} || $peers->{uc $name}{pass} ne $pass) {
         return 0;
     }
 
     my $conn = $self->{state}{conns}{$conn_id};
-    if (!$peers->{uc $name}{ipmask} && $conn->{socket}[0] =~ /^127\./) {
+    if (!$peers->{uc $name}{ipmask}) {
         return 1;
     }
     return 0 if !$peers->{uc $name}{ipmask};
