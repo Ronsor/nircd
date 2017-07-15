@@ -65,10 +65,18 @@ sub setup_authoper {
 	my $port;
 	 while ( ($host, $port) = each(%config->{port}) ) {
 		$port = %config->{port}->{$host};
+		if ( $port =~ /(.*):(.*)/ ) {
+			$host = $1;
+			$port = $2;
+		}
 		$ircd->add_listener(bindaddr => $host, port => $port);
 	}
 	 while ( ($host, $port) = each(%config->{sslport}) ) {
 		$port = %config->{sslport}->{$host};
+		if ( $port =~ /(.*):(.*)/ ) {
+			$host = $1;
+			$port = $2;
+		}
 		$ircd->add_listener(bindaddr => $host, port => $port, usessl => 1);
 	}
 	my ($sname, $data);
@@ -130,18 +138,18 @@ sub _default {
 	 my ($kernel, $heap) = @_[KERNEL, HEAP];
 	 my ($event, $args) = @_[ARG0 .. $#_];
 
-#	 print "$event: ";
-#	 for my $arg (@$args) {
-#		 if (ref($arg) eq 'ARRAY') {
-#			 print "[", join ( ", ", @$arg ), "] ";
-#		 }
-#		 elsif (ref($arg) eq 'HASH') {
-#			 print "{", join ( ", ", %$arg ), "} ";
-#		 }
-#		 else {
-#			 print "'$arg' ";
-#		 }
-#	 }
+	 print "$event: ";
+	 for my $arg (@$args) {
+		 if (ref($arg) eq 'ARRAY') {
+			 print "[", join ( ", ", @$arg ), "] ";
+		 }
+		 elsif (ref($arg) eq 'HASH') {
+			 print "{", join ( ", ", %$arg ), "} ";
+		 }
+		 else {
+			 print "'$arg' ";
+		 }
+	 }
 
 	 print "\n";
 	if ( $event eq "ircd_daemon_rehash" ) {
