@@ -1,0 +1,3 @@
+#!/bin/sh
+export PERL5LIB=lib
+exec perl ircd.pl $@

@@ -1,0 +1,52 @@
+#!/bin/sh
+
+printf "Configure environment for nircd\n"
+
+if [ "a$1" = "a-h" ]; then
+	printf "Usage: ./configure [require_root]\n"
+	printf "  require_root - When installing requirements/dependencies (if necessary),\n"
+	printf "                   require root access to install (using cpan). Normal behavior\n"
+	printf "                   is to setup cpanm (takes ~30 seconds) and install dependencies.\n"
+	exit 1
+fi
+for t in `echo "$@"`; do
+	export $t=1
+done
+tryfind() {
+	v=`which $1`
+	if [ "a$v" = "a" ]; then
+		printf "error: can't find $v\n"
+		exit 1
+	fi
+	printf "$v\n"
+}
+printf "Looking for openssl... "
+tryfind openssl
+printf "Looking for make... "
+tryfind make
+printf "Looking for perl... "
+tryfind perl
+printf "Looking for cpan... "
+tryfind cpan
+printf "Looking for POE... "
+perl -e 'use POE::Component::Server::IRC' 2>&1 >/dev/null; res=$?
+if [ "$res" != "0" ]; then
+if [ "$require_root" == "1" ]; then
+printf "Installing requirements... (requires root)\n"
+sudo sh -c 'echo "notest install POE" | cpan'
+sudo sh -c 'echo "notest install POE::Component::Server::IRC" | cpan'
+else
+printf "Looking for wget... "
+tryfind wget
+export PERL_CPANM_OPT="--skip-installed --notest"
+printf "Installing cpanminus... "
+wget -O- http://cpanmin.us | (export PERL_CPANM_OPT="--skip-installed --notest"; perl - -l ~/perl5 App::cpanminus local::lib)
+eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
+cpanm --notest POE POE::Component::Server::IRC
+fi
+else
+printf "found\n"
+fi
+printf "Generating SSL Information...\n"
+openssl req -x509 -nodes -newkey rsa:2048 -keyout ssl.key -out ssl.crt -days 4096 -subj "/CN=`uname -n`"
+printf "Done\n"
