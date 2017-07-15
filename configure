@@ -29,12 +29,13 @@ tryfind perl
 printf "Looking for cpan... "
 tryfind cpan
 printf "Looking for POE... "
-perl -I ~/perl5/lib/perl5 -e 'use POE::Component::Server::IRC' 2>&1 >/dev/null; res=$?
+perl -I ~/perl5/lib/perl5 -e 'use POE::Component::Server::IRC; use POE::Component:SSLify; 2>&1 >/dev/null; res=$?
 if [ "$res" != "0" ]; then
 if [ "$require_root" == "1" ]; then
 printf "Installing requirements... (requires root)\n"
 sudo sh -c 'echo "notest install POE" | cpan'
 sudo sh -c 'echo "notest install POE::Component::Server::IRC" | cpan'
+sudo sh -c 'echo "notest install POE::Component::SSLify" | cpan'
 else
 printf "Looking for wget... "
 tryfind wget
@@ -42,7 +43,7 @@ export PERL_CPANM_OPT="--skip-installed --notest"
 printf "Installing cpanminus... "
 wget -O- http://cpanmin.us | (export PERL_CPANM_OPT="--skip-installed --notest"; perl - -l ~/perl5 App::cpanminus local::lib)
 eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
-cpanm --notest POE POE::Component::Server::IRC
+cpanm --notest POE POE::Component::Server::IRC POE::Component::SSLify
 fi
 else
 printf "found\n"
