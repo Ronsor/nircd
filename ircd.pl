@@ -83,10 +83,10 @@ sub setup_authoper {
 	while ( ($sname, $data) = each(%config->{peer}) ) {
 		$data = %config->{peer}->{$sname};
 		if ( $data =~ /(.*):(.*)/ ) {
-			$ircd->add_peer(name => $sname, pass => "pass", rpass => "pass", type => "r", raddress => $1, rport => $2, auto => 1);
+			$ircd->add_peer(name => "connect.$sname", pass => "pass", rpass => "pass", type => "r", raddress => $1, rport => $2, auto => 1);
 		}
 	}
-	$ircd->add_peer(name => "default", pass => "pass", rpass => "pass", type => "c");
+	$ircd->add_peer(name => "default", pass => "pass", rpass => "pass", type => "c", ipmask => "*");
 }
 #my %config = (
 #	servername => 'simple.poco.server.irc', 
