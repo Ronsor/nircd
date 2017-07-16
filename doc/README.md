@@ -11,13 +11,26 @@ nircd is simple to setup.
 1. Run the `./configure` script. For options, see
 `./configure -h`.
 
-2. If ./configure encounters any errors, see the FAQ
+2. If `./configure` encounters any errors, see the FAQ
 
 3. Copy sample.conf to ircd.conf and modify it. Make sure to change
    the name of the MOTD file to "ircd.motd"!
 
 4. Run the ircd as `./ircd ircd.conf`. It does not fork() and daemonize
    so you'll need to run it in something like `tmux` or `screen`
+
+## Features
+
+* Anybody can link a server (unless you specifically ban them), this
+  makes IRC more decentralized.
+
+* TS5-based linking protocol allows you to run services and link
+  ircd-hybrid-7.0 servers
+
+* Runs on any platform that perl runs on
+
+* Easy to modify if you want to
+
 
 ## FAQ
 
@@ -35,6 +48,7 @@ for any problem you have.
 OpenSSL is critical to providing SSL listening capability in the IRCd.
 For a more secure future, there is no way to disable SSL support and
 requirements (short of modifying the software).
+
 ## License
 
 Mozilla Public License, 2.0
