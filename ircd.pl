@@ -33,7 +33,7 @@ sub readconf {
 		@sslopt[1] = $config->{ssl}->{cert};
 		$config->{server}->{sslify_options} = \@sslopt;
 	}
-	open (MYMOTD, $config->{server}->{motd}) || return $config;
+	open (MYMOTD, $config->{server}->{motd}) || return %$config;
 	@motdlines = ();
 	while (<MYMOTD>) {
 		chomp;
@@ -45,17 +45,17 @@ sub readconf {
 }
 
 my %config = readconf($confpath);
-my %sconfig = %{%config->{server}};
+my %sconfig = %{$config{server}};
 sub setup_authoper {
         my $ircd = $_[0];
 	my ($oper, $pass);
-	 while ( ($oper,$pass) = each(%config->{oper}) ) {
-		$pass = %config->{oper}->{$oper};
+	 while ( ($oper,$pass) = each(%{$config{oper}}) ) {
+		$pass = $config{oper}->{$oper};
 		$ircd->add_operator({username => $oper, password => $pass, ipmask => '*'});
 	 }
 	my ($host, $spoof);
-	 while ( ($host,$spoof) = each(%config->{auth}) ) {
-		$spoof = %config->{auth}->{$host};
+	 while ( ($host,$spoof) = each(%{$config{auth}}) ) {
+		$spoof = $config{auth}->{$host};
 		if ( $spoof eq '*' ) {
 			$ircd->add_auth({mask => $host});
 		} else {
@@ -63,16 +63,16 @@ sub setup_authoper {
 		}
 	}	
 	my $port;
-	 while ( ($host, $port) = each(%config->{port}) ) {
-		$port = %config->{port}->{$host};
+	 while ( ($host, $port) = each(%{$config{port}}) ) {
+		$port = $config{port}->{$host};
 		if ( $port =~ /(.*):(.*)/ ) {
 			$host = $1;
 			$port = $2;
 		}
 		$ircd->add_listener(bindaddr => $host, port => $port);
 	}
-	 while ( ($host, $port) = each(%config->{sslport}) ) {
-		$port = %config->{sslport}->{$host};
+	 while ( ($host, $port) = each(%{$config{sslport}}) ) {
+		$port = $config{sslport}->{$host};
 		if ( $port =~ /(.*):(.*)/ ) {
 			$host = $1;
 			$port = $2;
@@ -80,8 +80,8 @@ sub setup_authoper {
 		$ircd->add_listener(bindaddr => $host, port => $port, usessl => 1);
 	}
 	my ($sname, $data);
-	while ( ($sname, $data) = each(%config->{peer}) ) {
-		$data = %config->{peer}->{$sname};
+	while ( ($sname, $data) = each(%{$config{peer}}) ) {
+		$data = $config{peer}->{$sname};
 		if ( $data =~ /(.*):(.*)/ ) {
 			$ircd->add_peer(name => "connect.$sname", pass => "pass", rpass => "pass", type => "r", raddress => $1, rport => $2, auto => 1);
 		}
