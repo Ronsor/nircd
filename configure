@@ -43,7 +43,7 @@ export PERL_CPANM_OPT="--skip-installed --notest"
 printf "Installing cpanminus... "
 wget -O- http://cpanmin.us | (export PERL_CPANM_OPT="--skip-installed --notest"; perl - -l ~/perl5 App::cpanminus local::lib)
 eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
-cpanm --notest POE POE::Component::Server::IRC POE::Component::SSLify
+cpanm --notest --verbose POE POE::Component::Server::IRC POE::Component::SSLify
 fi
 else
 printf "found\n"
